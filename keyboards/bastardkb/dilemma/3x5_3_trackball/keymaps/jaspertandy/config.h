@@ -41,9 +41,11 @@
 #define RGBLIGHT_LED_COUNT 72
 
 // LED matrix panel: one non-reactive animation (purple rain), always playing.
-#define LED_MATRIX_MODULE_MOTION_USER_COUNT 1
-#define LED_MATRIX_MODULE_MOTION_STYLE (BKLM_MOTION_USER + 0)
-#define LED_MATRIX_MODULE_MOTION_CYCLE (BKLM_MOTION_USER + 0)
+// User styles: 0 = purple rain, 1 = TV static. LM_ANIM cycles between them
+// (Shift+LM_ANIM goes back); the choice is saved to EEPROM.
+#define LED_MATRIX_MODULE_MOTION_USER_COUNT 2
+#define LED_MATRIX_MODULE_MOTION_STYLE (BKLM_MOTION_USER + 1)
+#define LED_MATRIX_MODULE_MOTION_CYCLE (BKLM_MOTION_USER + 0), (BKLM_MOTION_USER + 1)
 #define LED_MATRIX_MODULE_MOTION_IDLE 1
 #define LED_MATRIX_MODULE_MOTION_IDLE_MS 0
 // Keep the panel on the animation: never dim or blank it, and make the style

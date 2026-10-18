@@ -4,6 +4,7 @@
 #include QMK_KEYBOARD_H
 
 #include "led_matrix_motion.h"
+#include "led_matrix_tv_static.h"
 
 typedef struct {
     int32_t  head;  /* Q8 rows from the top; negative while waiting to start */
@@ -58,6 +59,8 @@ bool bklm_motion_user(uint8_t index, RGB *pixels, const bklm_motion_t *m) {
     switch (index) {
         case 0:
             return purple_rain(pixels, m);
+        case 1:
+            return tv_static_paint(pixels, m);
         default:
             return false;
     }

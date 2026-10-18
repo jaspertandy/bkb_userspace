@@ -102,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * symmetrical to accomodate the left- and right-hand trackball.
  */
   [LAYER_MEDIA] = LAYOUT_split_3x5_3(
-    XXXXXXX, RM_PREV, RM_TOGG, RM_NEXT, XXXXXXX, XXXXXXX, RM_PREV, RM_TOGG, RM_NEXT, XXXXXXX,
+    LM_ANIM, RM_PREV, RM_TOGG, RM_NEXT, XXXXXXX, XXXXXXX, RM_PREV, RM_TOGG, RM_NEXT, LM_ANIM,
     KC_MPRV, KC_VOLD, KC_MUTE, KC_VOLU, KC_MNXT, KC_MPRV, KC_VOLD, KC_MUTE, KC_VOLU, KC_MNXT,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                       _______, KC_MPLY, KC_MSTP, KC_MSTP, KC_MPLY, KC_MUTE
@@ -171,28 +171,30 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 
 #ifdef COMMUNITY_MODULE_BK_LED_MATRIX_ENABLE
 #    include "led_matrix_motion.h"
+#    include "led_matrix_tv_static.h"
 #endif
 
 
 #ifdef COMMUNITY_MODULE_BK_LED_MATRIX_ENABLE
 /* The module paints pointer-mode icons, held modifiers and the layer stack over
  * the animation, and offers no switch for them. A style "preview" is the one
- * state that outranks all of those, so keep the panel previewing purple rain:
- * the preview length is set huge in config.h and re-armed if it ever lapses.
- * This also pins the style, so one saved to EEPROM earlier cannot win. */
-static void hold_purple_rain(void) {
+ * state that outranks all of those, so keep the panel previewing the current
+ * style: the preview length is set huge in config.h and re-armed if it ever
+ * lapses. LM_ANIM starts its own preview of the next style, so it still works. */
+static void hold_panel_style(void) {
     if (!bklm_motion_previewing()) {
-        bklm_motion_style_set(BKLM_MOTION_USER + 0, true);
+        bklm_motion_style_set(bklm_motion_style, true);
     }
 }
 
 void housekeeping_task_user(void) {
-    hold_purple_rain();
+    hold_panel_style();
+    tv_static_scan_matrix();
 }
 #endif
 
 void keyboard_post_init_user(void) {
 #ifdef COMMUNITY_MODULE_BK_LED_MATRIX_ENABLE
-    hold_purple_rain();
+    hold_panel_style();
 #endif
 }
